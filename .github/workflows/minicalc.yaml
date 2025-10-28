@@ -119,14 +119,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: REDACTED
+          images: ghcr.io/rainote/minicalc
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: MiniCalc.Web.Dockerfile
           push: true
-          tags: ghcr.io/gaschenk/minicalc:${{ needs.preprocess.outputs.sanitized_branch_name  }}
+          tags: ghcr.io/rainote/minicalc:${{ needs.preprocess.outputs.sanitized_branch_name  }}
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -138,7 +138,7 @@ jobs:
           context: .
           file: MiniCalc.Web.Dockerfile
           push: true
-          tags: ghcr.io/gaschenk/minicalc:latest
+          tags: ghcr.io/rainote/minicalc:latest
           platforms: linux/amd64, linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
