@@ -1,0 +1,67 @@
+﻿@page "/"
+
+@code {
+    public string? MathEquationText { get; set; }
+
+    public string? ResultText { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    private void SolveEquation()
+    {
+        try
+        {
+            var result = Lib.Calculator.EvaluateMathExpression(MathEquationText);
+            if (result == null)
+            {
+                Console.WriteLine("Invalid math equation.");
+                ResultText = string.Empty;
+                return;
+            }
+
+            ResultText = result.ToString();
+        }
+        catch (Exception e)
+        {
+            ResultText = string.Empty;
+            ErrorMessage = "There has been an error: " + e.Message;
+        }
+    }
+
+    private void ResetResult()
+    {
+        ResultText = null;
+    }
+
+    private void SolveEquationOnKeyUp(KeyboardEventArgs keyboardEventArgs)
+    {
+        // keyboardEventArgs can sometimes be null if the event is @onkeypress great
+        // workaround => onkeyup
+        if (keyboardEventArgs == null)
+            return;
+        if (keyboardEventArgs.Key == "Enter")
+        {
+            SolveEquation();
+        }
+    }
+
+}
+
+<PageTitle>Mini Calculator</PageTitle>
+
+<div
+    style="display:flex; flex-direction: column; max-width: 80%; min-width: 30%; width: fit-content; margin: 2rem 2rem 2rem 2rem;">
+    <h3>Mini Calculator</h3>
+    <p>Enter a math equation to solve:</p>
+    <InputText @bind-Value="MathEquationText" @onchange="ResetResult" @onkeyup="SolveEquationOnKeyUp"></InputText>
+
+    <button @onclick="SolveEquation">Calculate</button>
+    @if (MathEquationText != null && ResultText != null)
+    {
+        <p>
+            @MathEquationText = @ResultText
+        </p>
+    }
+    <span style="color: red">@ErrorMessage</span>
+
+</div>
